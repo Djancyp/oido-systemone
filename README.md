@@ -15,6 +15,7 @@
 
 [Quickstart](#quickstart) | [Docs](#documentation) | [API](docs/api.md) | [GPU](docs/gpu.md) | [Production](docs/production.md)
 
+[![ci](https://github.com/Djancyp/oido-systemone/actions/workflows/ci.yml/badge.svg)](https://github.com/Djancyp/oido-systemone/actions/workflows/ci.yml)
 [![license](https://img.shields.io/github/license/Djancyp/oido-systemone)](./LICENSE)
 [![go version](https://img.shields.io/github/go-mod/go-version/Djancyp/oido-systemone)](./go.mod)
 [![last commit](https://img.shields.io/github/last-commit/Djancyp/oido-systemone)](https://github.com/Djancyp/oido-systemone/commits/main)
