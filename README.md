@@ -1,17 +1,14 @@
 <!-- markdownlint-disable MD041 -->
 <div align="center">
 
-<pre>
-  mmmm  mmmmm  mmmm    mmmm          mmmm    m               #    "
- m"  "m   #    #   "m m"  "m        #"   " mm#mm  m   m   mmm#  mmm     mmm
- #    #   #    #    # #    #        "#mmm    #    #   #  #" "#    #    #" "#
- #    #   #    #    # #    #            "#   #    #   #  #   #    #    #   #
-  #mm#  mm#mm  #mmm"   #mm#         "mmm#"   "mm  "mm"#  "#m##  mm#mm  "#m#"
-</pre>
-
   <h1>
   Self-Hosted TypeSafe System One API, on Local Models
   </h1>
+
+  <img src="./docs/images/cover.jpg" alt="oido-systemone: an ASCII-art brain on a terminal screen" width="720">
+
+  <br>
+  <br>
 
 [Quickstart](#quickstart) | [Docs](#documentation) | [API](docs/api.md) | [GPU](docs/gpu.md) | [Docker](docs/docker.md) | [Production](docs/production.md)
 
