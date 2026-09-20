@@ -30,7 +30,7 @@ go vet ./... && go test -race ./...
 | File | Purpose |
 |------|---------|
 | `README.md`, `docs/` | Readme and reference docs |
-| `LICENSE` | MIT |
+| `LICENSE`, `CONTRIBUTING.md` | MIT license, contribution guide |
 | `Dockerfile`, `docker-compose.yml`, `docker-compose.gpu.yml`, `.env.example` | Container image and production stack, see [Docker](docker.md) |
 | `main.go` | Flags, model install/load, Kronk scorer, HTTP server, request log |
 | `api.go` | `/v1/systemone`: auth, validation, prompt, scoring, answers |

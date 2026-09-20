@@ -106,10 +106,10 @@ For a real deployment set `API_KEY` and `DOCS=false`, and read [Production](docs
 
 ## Contributing
 
-Contributions are welcome. Before opening a pull request, run:
+Contributions are welcome: bug fixes, docs and new model presets. Read [CONTRIBUTING.md](CONTRIBUTING.md) for setup, the checks CI runs, and how to add a model. In short:
 
 ```shell
-go vet ./... && go test -race ./...
+go vet ./... && go test -race ./...   # no GPU or model needed
 ```
 
 ## License
