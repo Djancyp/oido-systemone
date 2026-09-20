@@ -1,0 +1,9 @@
+.git
+.github
+build
+tmp
+data
+docs
+*.md
+.env
+oido-systemone

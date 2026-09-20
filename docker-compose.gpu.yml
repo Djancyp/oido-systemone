@@ -1,0 +1,11 @@
+# GPU override for AMD / Intel (Vulkan): docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d
+# RENDER_GID / VIDEO_GID: `getent group render video` on the host.
+services:
+  oido-systemone:
+    environment:
+      KRONK_PROCESSOR: vulkan
+    devices:
+      - /dev/dri:/dev/dri
+    group_add:
+      - "${RENDER_GID:-992}"
+      - "${VIDEO_GID:-44}"

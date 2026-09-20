@@ -31,6 +31,7 @@ go vet ./... && go test -race ./...
 |------|---------|
 | `README.md`, `docs/` | Readme and reference docs |
 | `LICENSE` | MIT |
+| `Dockerfile`, `docker-compose.yml`, `docker-compose.gpu.yml`, `.env.example` | Container image and production stack, see [Docker](docker.md) |
 | `main.go` | Flags, model install/load, Kronk scorer, HTTP server, request log |
 | `api.go` | `/v1/systemone`: auth, validation, prompt, scoring, answers |
 | `logcolor.go` | Colored slog handler (terminal only) |

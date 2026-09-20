@@ -13,7 +13,7 @@
   Self-Hosted TypeSafe System One API, on Local Models
   </h1>
 
-[Quickstart](#quickstart) | [Docs](#documentation) | [API](docs/api.md) | [GPU](docs/gpu.md) | [Production](docs/production.md)
+[Quickstart](#quickstart) | [Docs](#documentation) | [API](docs/api.md) | [GPU](docs/gpu.md) | [Docker](docs/docker.md) | [Production](docs/production.md)
 
 [![ci](https://github.com/Djancyp/oido-systemone/actions/workflows/ci.yml/badge.svg)](https://github.com/Djancyp/oido-systemone/actions/workflows/ci.yml)
 [![license](https://img.shields.io/github/license/Djancyp/oido-systemone)](./LICENSE)
@@ -24,7 +24,7 @@
 
 **oido-systemone** is a local, drop-in server for TypeSafe's **System One** API (`POST /v1/systemone`). It runs a GGUF model (MiniCPM5-2B or Qwen3.5-4B) in-process through [Kronk](https://github.com/ardanlabs/kronk) and llama.cpp, so answers never leave your machine. Every answer is one forward pass and one token: a softmax over option-letter logprobs. No text is generated.
 
-- One Go binary. No Docker, no external API
+- One Go binary. Docker optional, no external API
   - GPU (CUDA, ROCm, Vulkan, Metal) picked automatically, CPU as fallback
 - Yes/no (`noul`), `choice` and `score` questions, mixed in one request
 - Pick the model per request, or use the `jev-latest` alias so TypeSafe SDKs work unchanged
@@ -83,6 +83,8 @@ curl -s localhost:8080/v1/systemone \
 
 Or open [http://localhost:8080/docs](http://localhost:8080/docs) and use "Try it out".
 
+Prefer containers? See [Docker](docs/docker.md): `docker compose up -d` for production, or a one-line `docker run`.
+
 Load only one model to save memory, or force the CPU:
 
 ```shell
@@ -97,6 +99,7 @@ For a real deployment set `API_KEY` and `DOCS=false`, and read [Production](docs
 - [**API**](docs/api.md): Request and response format, question types, errors, Swagger, how scoring works, known limits
 - [**Configuration**](docs/configuration.md): Models and every flag and environment variable
 - [**GPU**](docs/gpu.md): Backend selection, overrides, memory notes
+- [**Docker**](docs/docker.md): `docker run` examples (CPU, GPU) and production with Docker Compose
 - [**Production**](docs/production.md): Health, metrics, TLS, rate limits, shutdown, deploy checklist
 - [**Development**](docs/development.md): Requirements, live reload, tests, code layout
 
