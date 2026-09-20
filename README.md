@@ -1,4 +1,4 @@
-# oido-rlhf (JevLocal)
+# oido-systemone
 
 Local, drop-in server for TypeSafe's **System One** API (`POST /v1/systemone`).
 Runs a local GGUF model (MiniCPM5-2B or Qwen3.5-4B, Q4_K_M) in-process via [Kronk](https://github.com/ardanlabs/kronk) (llama.cpp).
@@ -21,7 +21,7 @@ generated. Port of `directScore()` from [TheoLeeCJ/Semif](https://github.com/The
 go run .                    # listens on :8080, loads both models
 MODEL=qwen3.5-4b go run .   # load only Qwen3.5-4B
 air                      # rebuild + restart on change (see .air.toml)
-go build -o jevlocal . && ./jevlocal -addr :9000 -slots 2
+go build -o oido-systemone . && ./oido-systemone -addr :9000 -slots 2
 ```
 
 On start it prints the logo and where it runs (stderr), then the `listening` log line, which means it is ready:

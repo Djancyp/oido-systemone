@@ -3,8 +3,8 @@ tmp_dir = "build"
 
 [build]
   args_bin = []
-  bin = "./build/jevlocal"
-  cmd = "CGO_ENABLED=1 go build -o ./build/jevlocal ."
+  bin = "./build/oido-systemone"
+  cmd = "CGO_ENABLED=1 go build -o ./build/oido-systemone ."
   delay = 1000
   exclude_dir = ["assets", "tmp", "vendor", "build", "data"]
   exclude_file = []

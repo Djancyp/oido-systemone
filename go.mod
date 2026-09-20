@@ -1,4 +1,4 @@
-module oido-rlhf
+module github.com/Djancyp/oido-systemone
 
 go 1.27.0
 

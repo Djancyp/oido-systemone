@@ -1,4 +1,4 @@
-// Command oido-rlhf serves TypeSafe's System One API (POST /v1/systemone) from a
+// Command oido-systemone serves TypeSafe's System One API (POST /v1/systemone) from a
 // local model: MiniCPM5-2B (Q4_K_M) via Kronk. Every answer is one forward pass,
 // 1 token, softmax over option-letter logprobs. No text is generated.
 // Port of github.com/TheoLeeCJ/Semif webgpu-demo/worker.js directScore().
