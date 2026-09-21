@@ -11,7 +11,8 @@ tmp_dir = "build"
   exclude_regex = ["_test.go"]
   exclude_unchanged = false
   follow_symlink = false
-  full_bin = ""
+  full_bin = "MODEL=qwen3.5-4b ./build/oido-systemone"  # dev: one model, fast reloads
+  # full_bin = "MODEL=minicpm5-2b,qwen3.5-4b,qwen3-4b ./build/oido-systemone"  # all three models
   include_dir = []
   include_ext = ["go", "tpl", "tmpl", "html"]
   include_file = []

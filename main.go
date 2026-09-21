@@ -16,6 +16,7 @@ import (
 	"os"
 	"os/signal"
 	"runtime"
+	"slices"
 	"strconv"
 	"strings"
 	"sync"
@@ -33,6 +34,16 @@ import (
 var presets = map[string]struct{ id, url string }{
 	"minicpm5-2b": {"oido-rlhf-minicpm5-2b", "https://huggingface.co/openbmb/MiniCPM5-2B-GGUF/resolve/2079a22f3beaa4e306449978533478fe0522f4b3/MiniCPM5-2B-Q4_K_M.gguf"},
 	"qwen3.5-4b":  {"oido-rlhf-qwen3.5-4b", "https://huggingface.co/unsloth/Qwen3.5-4B-GGUF/resolve/e87f176479d0855a907a41277aca2f8ee7a09523/Qwen3.5-4B-Q4_K_M.gguf"},
+	"qwen3-4b":    {"oido-rlhf-qwen3-4b", "https://huggingface.co/unsloth/Qwen3-4B-GGUF/resolve/22c9fc8a8c7700b76a1789366280a6a5a1ad1120/Qwen3-4B-Q4_K_M.gguf"},
+}
+
+func presetNames() []string {
+	names := make([]string, 0, len(presets))
+	for n := range presets {
+		names = append(names, n)
+	}
+	slices.Sort(names)
+	return names
 }
 
 // modelID is the default model: the first preset loaded. "jev-latest" and "jev-preview"
@@ -84,7 +95,7 @@ func run() error {
 	for i, name := range strings.Split(*preset, ",") {
 		m, ok := presets[strings.TrimSpace(name)]
 		if !ok {
-			return fmt.Errorf("unknown model %q (want minicpm5-2b or qwen3.5-4b)", name)
+			return fmt.Errorf("unknown model %q (want one of: %s)", name, strings.Join(presetNames(), ", "))
 		}
 		if scorers[m.id] != nil {
 			continue
@@ -104,6 +115,11 @@ func run() error {
 		}
 		defer krn.Unload(context.Background())
 		scorers[m.id] = kronkScorer(krn, make(chan struct{}, nSlots))
+		if env("SELF_CHECK", "true") != "false" {
+			if err := selfCheck(ctx, m.id, scorers[m.id]); err != nil {
+				return err
+			}
+		}
 		if i == 0 {
 			modelID = m.id
 		}
@@ -457,6 +473,26 @@ func kronkScorer(krn *kronk.Kronk, sem chan struct{}) scorer {
 		}
 		return softmax(logits), u, nil
 	}
+}
+
+// selfCheck asks a freshly loaded model one question with an obvious answer, in both option
+// orders, and fails startup if it errors or picks wrong. It catches a chat template that opens
+// with a reasoning block, a missing logprobs path or a bad GGUF before the first request.
+// SELF_CHECK=false skips it.
+func selfCheck(ctx context.Context, id string, sc scorer) error {
+	const want = 2 // "blue"
+	start := time.Now()
+	p, _, err := (&api{score: sc, bothOrders: true}).pick(ctx,
+		"On a clear day the sky is blue.", "What colour is the sky on a clear day?",
+		[]string{"red", "green", "blue", "yellow"}, true)
+	if err != nil {
+		return fmt.Errorf("self-check %s: %w", id, err)
+	}
+	if !(p[want] >= 0.5) { // chance is 0.25; written so NaN fails too
+		return fmt.Errorf("self-check %s: answered %.2f for the obvious option (want >= 0.5), probs %.3f; wrong chat template or model? SELF_CHECK=false skips", id, p[want], p)
+	}
+	slog.Info("self-check ok", "model", id, "p", fmt.Sprintf("%.3f", p[want]), "ms", time.Since(start).Milliseconds())
+	return nil
 }
 
 func letter(i int) string { return string(rune('A' + i)) }

@@ -4,11 +4,13 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"log/slog"
 	"math"
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"regexp"
 	"strings"
 	"sync"
 	"testing"
@@ -482,6 +484,60 @@ func TestMetrics(t *testing.T) {
 	} {
 		if !strings.Contains(body, want) {
 			t.Errorf("missing %q in:\n%s", want, body)
+		}
+	}
+}
+
+// Every preset is a distinct id and its URL is pinned to a commit, not a moving branch.
+func TestPresetsArePinned(t *testing.T) {
+	pinned := regexp.MustCompile(`^https://huggingface\.co/[^/]+/[^/]+/resolve/[0-9a-f]{40}/[^/]+\.gguf$`)
+	ids := map[string]bool{}
+	for name, p := range presets {
+		if !strings.HasPrefix(p.id, "oido-rlhf-") || ids[p.id] {
+			t.Errorf("%s: id %q is not unique or lacks the oido-rlhf- prefix", name, p.id)
+		}
+		ids[p.id] = true
+		if !pinned.MatchString(p.url) {
+			t.Errorf("%s: url %q is not pinned to a 40-hex commit", name, p.url)
+		}
+	}
+}
+
+func TestSelfCheck(t *testing.T) {
+	// answers correctly: finds the letter shown for "blue" in the prompt
+	right := func(_ context.Context, _, user string, n int) ([]float64, usage, error) {
+		p := make([]float64, n)
+		for i := range p {
+			p[i] = 0.1 / float64(n-1)
+			if strings.Contains(user, letter(i)+". blue") {
+				p[i] = 0.9
+			}
+		}
+		return p, usage{}, nil
+	}
+	broken := func(context.Context, string, string, int) ([]float64, usage, error) {
+		return nil, usage{}, errors.New("no option letter in top-20")
+	}
+	nan := func(_ context.Context, _, _ string, n int) ([]float64, usage, error) {
+		p := make([]float64, n)
+		for i := range p {
+			p[i] = math.NaN()
+		}
+		return p, usage{}, nil
+	}
+	cases := []struct {
+		name string
+		sc   scorer
+		fail bool
+	}{
+		{"right", right, false},
+		{"NaN", nan, true},
+		{"always A", (&fake{}).score, true}, // position bias: blue is never A in either order
+		{"scorer error", broken, true},
+	}
+	for _, c := range cases {
+		if err := selfCheck(context.Background(), "m", c.sc); (err != nil) != c.fail {
+			t.Errorf("%s: err = %v, want fail = %v", c.name, err, c.fail)
 		}
 	}
 }

@@ -4,7 +4,7 @@
 
 Body: `{ "model", "state", "questions" }`
 
-- `model`: picks the model. `oido-rlhf-minicpm5-2b`, `oido-rlhf-qwen3.5-4b`, or `jev-latest` / `jev-preview` for the default (first in `MODEL`). The response `model` field says which one answered. Unknown or not-loaded id: `422` listing valid ones
+- `model`: picks the model. `oido-rlhf-minicpm5-2b`, `oido-rlhf-qwen3.5-4b`, `oido-rlhf-qwen3-4b` (if loaded), or `jev-latest` / `jev-preview` for the default (first in `MODEL`). The response `model` field says which one answered. Unknown or not-loaded id: `422` listing valid ones
 - `state`: string, object or array. The content every question refers to
 - `questions`: object of `name -> question`, 1 to 64 questions, answered in parallel
 

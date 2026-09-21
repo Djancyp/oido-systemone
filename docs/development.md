@@ -12,6 +12,7 @@
 ```sh
 go run .                                  # listens on :8080, loads both models
 MODEL=qwen3.5-4b go run .                 # load only Qwen3.5-4B
+MODEL=minicpm5-2b,qwen3.5-4b,qwen3-4b go run .   # also load Qwen3-4B
 air                                       # rebuild + restart on change (see .air.toml)
 go build -o oido-systemone . && ./oido-systemone -addr :9000 -slots 2
 ```

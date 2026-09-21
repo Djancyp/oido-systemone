@@ -6,6 +6,10 @@
 |---------|--------------------------|------|-------------|
 | `minicpm5-2b` (default) | `openbmb/MiniCPM5-2B-GGUF` Q4_K_M, the revision SemIf tested | ~1.5 GB | `oido-rlhf-minicpm5-2b` |
 | `qwen3.5-4b` | `unsloth/Qwen3.5-4B-GGUF` Q4_K_M | ~2.7 GB | `oido-rlhf-qwen3.5-4b` |
+| `qwen3-4b` (opt-in) | `unsloth/Qwen3-4B-GGUF` Q4_K_M | ~2.5 GB | `oido-rlhf-qwen3-4b` |
+
+`qwen3-4b` is not in the default list, to keep the default memory footprint: add it with
+`MODEL=minicpm5-2b,qwen3.5-4b,qwen3-4b` (or `MODEL=qwen3-4b` alone). The first name in the list answers `jev-latest`.
 
 All listed models load at startup and stay in RAM (weights + `-ctx` KV cache each), so a
 single-model box should set `MODEL=minicpm5-2b`. Each model has its own `-slots` limit. Add a preset
@@ -38,4 +42,5 @@ Flag wins over env; env wins over default.
 | | `BANNER` | `true` | `false` hides the startup logo block |
 | | `DOCS` | `true` | `false` hides `/docs` and `/openapi.json` |
 | | `BOTH_ORDERS` | `true` | Average forward + reversed option order to cancel position bias. `false` = ~2x faster, more bias |
+| | `SELF_CHECK` | `true` | Ask each model one obvious question at startup and exit if it fails or picks wrong (bad chat template, thinking on, no logprobs). `false` skips |
 | | `LOG_LEVEL` | `info` | `debug`, `info`, `warn`, `error`. **`debug` logs prompts and probabilities (request content): dev only** |
